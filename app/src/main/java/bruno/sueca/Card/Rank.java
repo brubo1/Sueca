@@ -1,4 +1,4 @@
-package bruno.sueca;
+package bruno.sueca.Card;
 
 /**
  * Represents the Rank of the card

@@ -1,4 +1,4 @@
-package bruno.sueca;
+package bruno.sueca.Card;
 import java.util.Collections;
 import java.util.Stack;
 /**
@@ -13,7 +13,7 @@ public class Deck {
      * Create a deck of 40 cards
      */
     public Deck(){
-        aCards = new Stack<Card>();
+        aCards = new Stack<>();
         reset();
         shuffle();
     }

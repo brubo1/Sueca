@@ -1,4 +1,4 @@
-package bruno.sueca;
+package bruno.sueca.Card;
 
 import android.support.annotation.NonNull;
 
@@ -67,12 +67,17 @@ public class Card implements Comparable<Card>{
         }
     }
 
+    /**
+     * Checks if the card is a trump card
+     * @param pSuit Suit that defines trump cards
+     * @return True if it is a trump card
+     */
     public boolean isTrump(Suit pSuit) {
         int difference = this.aSuit.ordinal() - pSuit.ordinal();
         return (difference == 0);
     }
     /**
-     * The hashcode for a card is the suit*13 + that of the rank (perfect hash).
+     * The hashcode for a card is the suit*10 + that of the rank (perfect hash).
      * @return the hashcode of the card
      * @see java.lang.Object#hashCode()
      */
