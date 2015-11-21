@@ -1,4 +1,4 @@
-package bruno.sueca.Team;
+package bruno.sueca.Team.Player;
 
 import java.util.HashSet;
 import java.util.Iterator;

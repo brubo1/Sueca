@@ -2,7 +2,7 @@ package bruno.sueca.Team.Player;
 
 import bruno.sueca.Card.Card;
 import bruno.sueca.Card.Suit;
-import bruno.sueca.Team.Hand;
+
 /**
  * A human player of the game.
  * Created by God Bruno on 21/11/2015.
