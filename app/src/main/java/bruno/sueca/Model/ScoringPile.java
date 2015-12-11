@@ -1,8 +1,8 @@
-package bruno.sueca.Team;
+package bruno.sueca.Model;
 
 import java.util.Stack;
 
-import bruno.sueca.Card.Card;
+import bruno.sueca.Model.Card.Card;
 
 /**
  * Pile of cards held by a team which needs to have the points counted.
@@ -10,14 +10,14 @@ import bruno.sueca.Card.Card;
  */
 public class ScoringPile {
 
-    private int aScore;             //Score held by the Scoring Pile
+    private int aTricks;             //Score held by the Scoring Pile
     private Stack<Card> aPile;      //cards won during Vasa
 
     /**
      * Constructor of a ScoringPile.
      */
     public ScoringPile(){
-        aScore = 0;
+        aTricks = 0;
         aPile = new Stack<>();
     }
 
@@ -26,7 +26,7 @@ public class ScoringPile {
      * @param pPoints The points to be added to the current team vasa.
      */
     public void addPoints(int pPoints){
-        aScore += pPoints;
+        aTricks += pPoints;
     }
 
     /**
@@ -34,7 +34,7 @@ public class ScoringPile {
      * @return number of points in the scoring pile.
      */
     public int getScore(){
-        return this.aScore;
+        return this.aTricks;
     }
 
     /**
@@ -42,6 +42,6 @@ public class ScoringPile {
      */
     public void clear(){
         this.aPile.clear();
-        this.aScore = 0;
+        this.aTricks = 0;
     }
 }
