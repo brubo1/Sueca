@@ -2,9 +2,11 @@ package bruno.sueca.Model;
 
 import bruno.sueca.Model.Card.Card;
 import bruno.sueca.Model.Card.Suit;
+import bruno.sueca.Model.Player.Player;
 
 /**
- * Created by God Bruno on 11/12/2015.
+ * Observes each plays.
+ * Created by Bruno on 11/12/2015.
  */
 
 public class PlayEnd implements PlayObserver {
@@ -12,42 +14,47 @@ public class PlayEnd implements PlayObserver {
 
     /**
      * Resolves the player who won the play
-     * @param pCards Cards played
-     * @param pFirstCard position of the first card played
+     * @param pPlayedCards Cards played this current play
+     * @return The player who won the play.
      */
     @Override
-    public void notifyFinishedPlay(Card[] pCards, int pFirstCard) {
-        Card BestCard = pCards[pFirstCard];
+    public Player notifyFinishedPlay( PlayedCards pPlayedCards) {
+        Card BestCard = pPlayedCards.getCard( 0 );
+        int winner = 0;
 
-        for( int i = 0 ; i < 4 ; i++ ){
-            if( i != pFirstCard ){
-
-                if( pCards[i].isTrump( aTrump ) && !BestCard.isTrump( aTrump ) ){       // trump / not trump
-                    BestCard = pCards[i];
-                }else if( pCards[i].isTrump( aTrump ) && BestCard.isTrump( aTrump )){   // trump / trump
-                    if( BestCard.compareTo(pCards[i])> 0 ){
-                        BestCard = pCards[i];
-                    }else{
-
-                    }
-                }else if( !pCards[i].isTrump( aTrump )  && BestCard.isTrump( aTrump ) ){// not trump / trump
-
-                }else{
-                    if( BestCard.compareTo(pCards[i])> 0 ){                             // not trump / not trump
-                        BestCard = pCards[i];
-                    }
+        for( int i = 1 ; i < 4 ; i++ ){
+            if( pPlayedCards.getCard( i ).isTrump( aTrump ) && !BestCard.isTrump( aTrump ) ){       // trump / not trump
+                BestCard = pPlayedCards.getCard( i );
+                winner = i;
+            }else if( pPlayedCards.getCard( i ).isTrump( aTrump ) && BestCard.isTrump( aTrump )){   // trump / trump
+                if( BestCard.compareTo(pPlayedCards.getCard( i ))> 0 ){
+                    BestCard = pPlayedCards.getCard( i );
+                    winner = i;
+                }
+            }else if( !pPlayedCards.getCard( i ).isTrump( aTrump )  && BestCard.isTrump( aTrump ) ){// not trump / trump
+                //do nothing
+            }else{
+                if( BestCard.compareTo(pPlayedCards.getCard( i ))> 0 ){                             // not trump / not trump
+                    BestCard = pPlayedCards.getCard( i );
+                    winner = i;
                 }
             }
-        }
-        //TODO TO TEST
+        }     //TODO TO TEST
+        return pPlayedCards.getPlayer( winner );
     }
+
 
     /**
      * Sets the Trump suit.
-     * @param pTrump
+     * @param pTrump The trump card
      */
     @Override
     public void setTrump(Suit pTrump) {
         aTrump = pTrump;
+    }
+
+    @Override
+    public void notifyCardPlayed(Card pCard) {
+
     }
 }

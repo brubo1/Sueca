@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.Stack;
 /**
  * This class represents a deck of cards.
- * Created by God Bruno on 10/11/2015.
+ * Created by Bruno on 10/11/2015.
  */
 public class Deck {
 

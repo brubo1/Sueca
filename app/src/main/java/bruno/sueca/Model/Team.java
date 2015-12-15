@@ -3,6 +3,7 @@ package bruno.sueca.Model;
 
 import java.util.ArrayList;
 
+import bruno.sueca.Model.Card.Card;
 import bruno.sueca.Model.Player.Player;
 
 /**
@@ -29,13 +30,6 @@ public class Team {
     public void addPlayers( Player pPlayer1, Player pPlayer2 ){
         aPlayers.add(pPlayer1);
         aPlayers.add(pPlayer2);
-    }
-    /**
-     * Add points to the current Vasa.
-     * @param pTricks The number of points gained.
-     */
-    public void addTricksGame(int pTricks){
-        this.aScoringPile.addPoints(pTricks);
     }
 
     /**
@@ -69,13 +63,31 @@ public class Team {
     }
     /**
      * Check if the team won.
-     * @param pPoints The number of points needed to win the game.
+     * @param pGames The number of points needed to win the game.
      */
-    public boolean isGameWon(int pPoints){
+    public boolean isGameWon(int pGames){
 
-        if (aGames >= pPoints){
+        if (aGames >= pGames){
             return true;
         }
         return false;
     }
+
+    /**
+     * Check if team has pPlayer
+     * @param pPlayer the player to check
+     * @return true if player is in the team
+     */
+    public boolean contain( Player pPlayer ){
+        return aPlayers.contains( pPlayer );
+    }
+
+    /**
+     * Add cards to the scoring pile
+     * @param pCards The cards to be added.
+     */
+    public void addScoringPile( ArrayList<Card> pCards){
+        aScoringPile.addCards(pCards);
+    }
+
 }

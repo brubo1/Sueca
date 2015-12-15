@@ -18,5 +18,17 @@ public interface Player {
      * Player played a card
      * @param pCard Card played.
      */
-    void playCard(Card pCard, Suit pVasaSuit);
+    void playCard(Card pCard, Suit pPlaySuit);
+
+    /**
+     * sets the trump card of the game
+     * @param pTrumpCard the trump card
+     */
+    void setTrumpCard( Card pTrumpCard );
+
+    /**
+     * Decide whether deal himself first
+     * @return It returns true if he decides to deal himself first.
+     */
+    boolean Deal();
 }

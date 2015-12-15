@@ -3,7 +3,7 @@ package bruno.sueca.Model.Card;
 import android.support.annotation.NonNull;
 
 /**This class represents a card.
- * Created by God Bruno on 10/11/2015.
+ * Created by Bruno on 10/11/2015.
  */
 public class Card implements Comparable<Card>{
     private final Rank aRank;
@@ -85,5 +85,8 @@ public class Card implements Comparable<Card>{
     public int hashCode()
     {
         return this.getSuit().ordinal() * Rank.values().length + this.getRank().ordinal();
+    }
+    public Card clone(Rank pRank, Suit pSuit){
+        return new Card( pRank, pSuit);
     }
 }
