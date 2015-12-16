@@ -15,6 +15,7 @@ public class Team {
     private ArrayList<Player> aPlayers;
     private ScoringPile aScoringPile;
     private int aGames; //Score of the team
+    private final int GAMESTOWIN = 4;
 
     public Team(){
         aPlayers = new ArrayList<Player>();
@@ -48,26 +49,18 @@ public class Team {
     }
 
     /**
-     * Clear the team's points from finished vasa.
+     * Clear the team's points from finished game.
      * pre-condition The players have empty hands.
      */
-    public void clearRound(){
-        this.aScoringPile.clear();
-        this.aGames = 0;
-    }
-
     public void clearGame(){
-        this.aPlayers.clear();
-        aGames = 0;
-        this.clearRound();
+        this.aScoringPile.clear();
     }
     /**
      * Check if the team won.
-     * @param pGames The number of points needed to win the game.
      */
-    public boolean isGameWon(int pGames){
+    public boolean isGameWon(){
 
-        if (aGames >= pGames){
+        if (aGames >= GAMESTOWIN){
             return true;
         }
         return false;

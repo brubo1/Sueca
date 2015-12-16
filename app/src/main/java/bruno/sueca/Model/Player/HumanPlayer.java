@@ -25,7 +25,7 @@ public class HumanPlayer implements Player{
 
     @Override
     public void playCard(Card pCard, Suit pPlaySuit) {
-        if( pPlaySuit == null ) {pPlaySuit = pCard.getSuit();}  //if he is the first player make his suit the play suit.
+        if( pPlaySuit == null ) {pPlaySuit = pCard.getSuit();}                  //if he is the first player make his suit the play suit.
         if( pCard.getSuit().equals(pPlaySuit)){
             aHand.playCard(pCard);
         }

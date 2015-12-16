@@ -5,6 +5,7 @@ import java.util.Random;
 
 import bruno.sueca.Model.Card.Card;
 import bruno.sueca.Model.Card.Deck;
+import bruno.sueca.Model.Player.AI;
 import bruno.sueca.Model.Player.EasyAI;
 import bruno.sueca.Model.Player.HumanPlayer;
 import bruno.sueca.Model.Player.Player;
@@ -20,15 +21,18 @@ public class Engine {
     private static Engine ourInstance = new Engine();
     private Deck aDeck;
     private PlayedCards aPlayedCards;
+
     private int aCurrentPlayer = 1;
     private int aCurrentDealer = 1;
     private int aNumberOfPlays = 0;
     private Difficulty aDifficulty;
+    private ArrayList<Team> aTeams;
+    private Player aPlayer;
+    private ArrayList<AI> aAIs;
 
     private ArrayList<PlayObserver> aPlayObservers ;
     private ArrayList<GameObserver> aGameObservers;
-    private ArrayList<Team> aTeams;
-    private ArrayList<Player> aPlayers;
+
 
 
     public static Engine getInstance() {
@@ -43,7 +47,7 @@ public class Engine {
         aPlayObservers = new ArrayList<PlayObserver>();
         aGameObservers = new ArrayList<GameObserver>();
         aTeams = new ArrayList<Team>();
-        aPlayers = new ArrayList<Player>();
+        aAIs = new ArrayList<AI>();
     }
 
     private void nextPlayer(){
@@ -51,6 +55,9 @@ public class Engine {
 
     }
 
+    private void nextDealer(){
+        aCurrentDealer = (aCurrentDealer + 1 ) % PLAYERS;
+    }
 
     /**
      * Creates a Game with a Human player
@@ -61,7 +68,7 @@ public class Engine {
         Team team2 = new Team();
 
         team1.addPlayers( new HumanPlayer() , new EasyAI());
-        team2.addPlayers( new EasyAI() , new EasyAI());
+        team2.addPlayers(new EasyAI(), new EasyAI());
     }
 
     /**
@@ -75,58 +82,197 @@ public class Engine {
         aTeams.add( team1 );
         aTeams.add( team2 );
 
-        aPlayers.add( new EasyAI() );
-        aPlayers.add( new EasyAI() );
-        aPlayers.add( new EasyAI() );
-        aPlayers.add( new EasyAI() );
+        aAIs.add(new EasyAI());
+        aAIs.add(new EasyAI());
+        aAIs.add(new EasyAI());
+        aAIs.add(new EasyAI());
 
-        team1.addPlayers( aPlayers.get(0) , aPlayers.get(2) );
-        team2.addPlayers( aPlayers.get(1) , aPlayers.get(3) );
+        team1.addPlayers(aAIs.get(0), aAIs.get(2));
+        team2.addPlayers(aAIs.get(1), aAIs.get(3));
 
         aCurrentDealer = new Random().nextInt(PLAYERS);
-        aCurrentPlayer = aCurrentDealer;
 
-        aDeck.reset();
-        aPlayers.get(aCurrentDealer).Deal();
-
-        this.nextPlayer();                                          //Player to the right of the dealer
+        playAuto();
 
     }
 
-    public void addToScoringPile( ArrayList<Card> pCards, Team pTeam ){
-        pTeam.addScoringPile( pCards );
-    }
-
-    public Team findTeam( Player pPlayer ){
-        for ( Team team : aTeams ){
-            if( team.contain( pPlayer ) ){
-                return team;
+    /**
+     * Play an automatic game.
+     */
+    public String playAuto(){
+        boolean GameWon = false;
+        Team GameWinner;
+        while( !GameWon ){
+            aCurrentPlayer = aCurrentDealer;
+            aDeck.reset();
+            aAIs.get(aCurrentDealer).Deal();
+            this.nextPlayer();                                          //Player to the right of the dealer
+            for( aNumberOfPlays = 0 ; aNumberOfPlays < 10 ; aNumberOfPlays++) {
+                for (AI ai : aAIs) {
+                    Player winningplayer = aPlayedCards.getPlayer();
+                    Team winningTeam = new Team();
+                    for(Team team: aTeams){
+                        if(team.contain( winningplayer )){
+                            winningTeam = team;
+                        }
+                    }
+                    Card cardplayed = ai.play( this.aPlayedCards.getPlaySuit(), this.aPlayedCards.getWinningCard(), winningTeam );
+                    this.playCard( cardplayed );
+                    notifyCardPlayed();
+                    nextPlayer();
+                }
+                Player player = notifyEndOfPlay();
+                reorderPlayers( player );
+                aPlayedCards.clear();
+            }
+            nextDealer();
+            GameWon = notifyGameEnd();
+            for( Team team : aTeams ){
+                team.clearGame();
             }
         }
-        return null;                                                //should never happen
+        return "Game Ended";
     }
+
+    /**
+     * Finds the team which pPlayer is part of.
+     * @param pPlayer The player to search for
+     * @return The team which pPlayer is part of.
+     */
+    public Team findTeam( Player pPlayer ){
+        Team playerteam = new Team();
+        for ( Team team : aTeams ){
+            if( team.contain( pPlayer ) ){
+                playerteam = team;
+            }
+        }
+        return playerteam;
+    }
+
+    /**
+     * Deal card to the dealer
+     */
+    public void dealSelf(){
+        for ( int i = 0; i < 9; i++ ){
+            if( aCurrentPlayer == 0 && this.aAIs.size() < 4 ){
+                this.aPlayer.drewFromDeck( aDeck.draw() );
+            }else{
+                this.aAIs.get( aCurrentPlayer ).drewFromDeck( aDeck.draw() );
+            }
+        }
+    }
+
+    /**
+     * Deal cards to the other players.
+     */
+    public void dealOthers(){
+        for (int j = 0 ; j < 3 ; j++){
+            this.nextPlayer();
+            for ( int i = 0; i < 10; i++ ){
+                if( aCurrentPlayer == 0 && this.aAIs.size() < 4 ) {
+                    aPlayer.drewFromDeck(aDeck.draw());
+                }else{
+                    this.aAIs.get( aCurrentPlayer ).drewFromDeck( aDeck.draw() );
+                }
+            }
+        }
+        this.aCurrentPlayer = aCurrentDealer;
+    }
+
+    /**
+     * When the dealer decides to deal itself first
+     */
+    public void dealSelfFirst(){
+        Card Trump = aDeck.draw();
+        aAIs.get(aCurrentDealer).setTrumpCard(Trump);
+        notifyTrump(Trump);
+        this.dealSelf();
+        dealOthers();
+    }
+
+    /**
+     * When the dealer decides to deal itself last
+     */
+    public void dealSelfLast(){
+        dealOthers();
+        this.dealSelf();
+        Card Trump = aDeck.draw();
+        aAIs.get(aCurrentDealer).setTrumpCard(Trump);
+        notifyTrump(Trump);
+    }
+
+    /**
+     * Deal the cards to the players
+     */
+    public void AIdeal(){
+        if( aAIs.get(aCurrentDealer).Deal() ){
+            dealSelfFirst();
+        }else{
+            dealSelfLast();
+        }
+    }
+
+    public void reorderPlayers( Player pPlayer ){
+        int winner;
+        ArrayList<AI> AIs = new ArrayList<AI>();
+        if( this.aAIs.size() < 4){
+            //there is a human player
+        }else{
+            winner = aAIs.indexOf( pPlayer );
+            for( int i = 0; i < 4; i++){
+                AIs.add(aAIs.get(winner));
+                winner = (winner + 1) % 4;
+            }
+        }
+    }
+
+    /**
+     * Put cards in played cards.
+     * @param pCard The card to be played
+     */
+    public void playCard( Card pCard ){
+        if( aCurrentPlayer == 0 && this.aAIs.size() < 4 ) {
+            this.aPlayedCards.addCards( pCard, aPlayer );
+        }else{
+            this.aPlayedCards.addCards( pCard, this.aAIs.get( aCurrentPlayer ));
+        }
+        this.nextPlayer();
+        notifyCardPlayed();
+    }
+
     /**
      * Notify the end of a play.
      */
-    public void notifyPlayEnd(){
+    public Player notifyEndOfPlay(){
         Team TeamWon;
-        Player player = aPlayers.get(0);
+        Player player = aPlayer;
         for( PlayObserver obs : aPlayObservers ){
-            player = obs.notifyFinishedPlay( aPlayedCards );
+            player = obs.notifyPlayEnd(aPlayedCards);
         }
 
         TeamWon = this.findTeam( player );
 
         TeamWon.addScoringPile(aPlayedCards.getCards());
+
+        return player;
+    }
+
+    public void notifyCardPlayed(){
+        int winner;
+        for( PlayObserver obs : aPlayObservers ){
+            winner = obs.notifyCardPlayed( aPlayedCards, aCurrentPlayer );
+        }
     }
 
     /**
      * Notify the end of a game.
      */
-    public void notifyGameEnd(){
+    public boolean notifyGameEnd(){
+        Team winner = new Team();
         for( GameObserver obs : aGameObservers){
-            obs.notifyFinishedGame( aTeams.get(0) , aTeams.get(1) );
+            winner = obs.notifyFinishedGame( aTeams.get(0) , aTeams.get(1) );
         }
+        return winner.isGameWon();
     }
 
     /**
@@ -137,52 +283,5 @@ public class Engine {
         for ( PlayObserver obs : aPlayObservers){
             obs.setTrump( pTrump.getSuit() );
         }
-    }
-
-    public void dealSelf(){
-        for ( int i = 0; i < 9; i++ ){
-            aPlayers.get(aCurrentDealer).drewFromDeck( aDeck.draw());
-        }
-    }
-
-    public void dealOthers(){
-        for (int j = 0 ; j < 3 ; j++){
-            this.nextPlayer();
-            for ( int i = 0; i < 10; i++ ){
-                aPlayers.get(aCurrentPlayer).drewFromDeck( aDeck.draw());
-            }
-            j++;
-        }
-        this.aCurrentPlayer = aCurrentDealer;
-    }
-
-    /**
-     * Deal the cards to the players
-     *
-     */
-    public void deal(){
-        if( aPlayers.get(aCurrentDealer).Deal() ){
-            Card Trump = aDeck.draw();
-            aPlayers.get(aCurrentDealer).setTrumpCard( Trump );
-            notifyTrump( Trump);
-            this.dealSelf();
-            dealOthers();
-        }else{
-            dealOthers();
-            this.dealSelf();
-            Card Trump = aDeck.draw();
-            aPlayers.get(aCurrentDealer).setTrumpCard(Trump);
-            notifyTrump( Trump );
-        }
-    }
-
-
-    /**
-     * Make players play a turn.
-     */
-    public void play(){
-
-
-
     }
 }

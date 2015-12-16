@@ -11,6 +11,7 @@ import bruno.sueca.Model.Player.Player;
 
 public class PlayEnd implements PlayObserver {
     private Suit aTrump;
+    private int aCurrentWinner;
 
     /**
      * Resolves the player who won the play
@@ -18,29 +19,38 @@ public class PlayEnd implements PlayObserver {
      * @return The player who won the play.
      */
     @Override
-    public Player notifyFinishedPlay( PlayedCards pPlayedCards) {
-        Card BestCard = pPlayedCards.getCard( 0 );
-        int winner = 0;
+    public Player notifyPlayEnd(PlayedCards pPlayedCards) {
+        int winner = aCurrentWinner;
+        reset();
+        return pPlayedCards.getPlayer( winner );
+    }
 
-        for( int i = 1 ; i < 4 ; i++ ){
-            if( pPlayedCards.getCard( i ).isTrump( aTrump ) && !BestCard.isTrump( aTrump ) ){       // trump / not trump
-                BestCard = pPlayedCards.getCard( i );
-                winner = i;
-            }else if( pPlayedCards.getCard( i ).isTrump( aTrump ) && BestCard.isTrump( aTrump )){   // trump / trump
-                if( BestCard.compareTo(pPlayedCards.getCard( i ))> 0 ){
-                    BestCard = pPlayedCards.getCard( i );
-                    winner = i;
+    @Override
+    public int notifyCardPlayed(PlayedCards pPlayedCards, int pCurrentPlayer) {
+        Card BestCard = pPlayedCards.getCard( aCurrentWinner );
+        if(aCurrentWinner == -1 ){
+            aCurrentWinner = 1;
+        }else {
+
+            if (pPlayedCards.getCard(pCurrentPlayer).isTrump(aTrump) && !BestCard.isTrump(aTrump)) {       // trump / not trump
+                BestCard = pPlayedCards.getCard(pCurrentPlayer);
+                aCurrentWinner = pCurrentPlayer;
+            } else if (pPlayedCards.getCard(pCurrentPlayer).isTrump(aTrump) && BestCard.isTrump(aTrump)) {   // trump / trump
+                if (BestCard.compareTo(pPlayedCards.getCard(pCurrentPlayer)) > 0) {
+                    BestCard = pPlayedCards.getCard(pCurrentPlayer);
+                    aCurrentWinner = pCurrentPlayer;
                 }
-            }else if( !pPlayedCards.getCard( i ).isTrump( aTrump )  && BestCard.isTrump( aTrump ) ){// not trump / trump
+            } else if (!pPlayedCards.getCard(pCurrentPlayer).isTrump(aTrump) && BestCard.isTrump(aTrump)) {// not trump / trump
                 //do nothing
-            }else{
-                if( BestCard.compareTo(pPlayedCards.getCard( i ))> 0 ){                             // not trump / not trump
-                    BestCard = pPlayedCards.getCard( i );
-                    winner = i;
+            } else {
+                if (BestCard.compareTo(pPlayedCards.getCard(pCurrentPlayer)) > 0) {                             // not trump / not trump
+                    BestCard = pPlayedCards.getCard(pCurrentPlayer);
+                    aCurrentWinner = pCurrentPlayer;
                 }
             }
-        }     //TODO TO TEST
-        return pPlayedCards.getPlayer( winner );
+        }
+        pPlayedCards.setWinningCard( BestCard );
+        return aCurrentWinner;
     }
 
 
@@ -53,8 +63,8 @@ public class PlayEnd implements PlayObserver {
         aTrump = pTrump;
     }
 
-    @Override
-    public void notifyCardPlayed(Card pCard) {
-
+    private void reset(){
+        aCurrentWinner = -1;
+        aTrump = null;
     }
 }

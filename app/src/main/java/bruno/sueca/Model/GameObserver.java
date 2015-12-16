@@ -9,5 +9,5 @@ public interface GameObserver {
     /**
      * notify the observer of a finished set.
      */
-    void notifyFinishedGame( Team pFirstTeam, Team pSecondTeam);
+    Team notifyFinishedGame( Team pFirstTeam, Team pSecondTeam);
 }

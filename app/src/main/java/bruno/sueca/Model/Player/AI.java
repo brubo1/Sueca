@@ -16,7 +16,7 @@ public abstract class AI implements Player {
      * @param pWinningCard The current winning card.
      * @param pWinningTeam The current winning team.
      */
-    Card play( Suit pPlaySuit, Card pWinningCard, Team pWinningTeam ){
+    public Card play( Suit pPlaySuit, Card pWinningCard, Team pWinningTeam ){
         return decideCard( pPlaySuit, pWinningCard, pWinningTeam );
     }
 }
