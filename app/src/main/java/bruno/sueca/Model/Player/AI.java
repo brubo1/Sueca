@@ -1,7 +1,7 @@
 package bruno.sueca.Model.Player;
-import bruno.sueca.Model.Card.Card;
-import bruno.sueca.Model.Card.Suit;
-import bruno.sueca.Model.Team;
+import bruno.sueca.Model.Core.Card;
+import bruno.sueca.Model.Core.Suit;
+import bruno.sueca.Model.Core.Team;
 
 /**
  * Created by Bruno on 15/12/2015.

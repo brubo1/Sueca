@@ -1,10 +1,8 @@
-package bruno.sueca.Model;
+package bruno.sueca.Model.Core;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import bruno.sueca.Model.Card.Card;
-import bruno.sueca.Model.Card.Deck;
 import bruno.sueca.Model.Player.AI;
 import bruno.sueca.Model.Player.EasyAI;
 import bruno.sueca.Model.Player.HumanPlayer;

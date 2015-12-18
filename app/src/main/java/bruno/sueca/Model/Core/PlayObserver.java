@@ -1,6 +1,5 @@
-package bruno.sueca.Model;
+package bruno.sueca.Model.Core;
 
-import bruno.sueca.Model.Card.Suit;
 import bruno.sueca.Model.Player.Player;
 
 /**

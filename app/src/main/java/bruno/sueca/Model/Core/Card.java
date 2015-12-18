@@ -1,4 +1,4 @@
-package bruno.sueca.Model.Card;
+package bruno.sueca.Model.Core;
 
 import android.support.annotation.NonNull;
 
@@ -10,7 +10,7 @@ public class Card implements Comparable<Card>{
     private final Suit aSuit;
 
     /**
-     * Creates a card
+     * Creates a card with a rank and a suit.
      * @param pRank rank of the card
      * @param pSuit suit of the card
      */
@@ -18,6 +18,12 @@ public class Card implements Comparable<Card>{
         aRank = pRank;
         aSuit = pSuit;
     }
+
+    /**
+     * This constructs a card with ints instead.
+     * @param pRank an int between 0 and 9.
+     * @param pSuit an int between 0 and 3.
+     */
     public Card(int pRank, int pSuit){
         Rank Ranks[] = Rank.values();
         Suit Suits[] = Suit.values();

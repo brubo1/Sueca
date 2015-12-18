@@ -1,10 +1,7 @@
-package bruno.sueca.Model;
+package bruno.sueca.Model.Core;
 
 import java.util.ArrayList;
 import java.util.Stack;
-
-import bruno.sueca.Model.Card.Card;
-import bruno.sueca.Model.Card.TricksCalculator;
 
 /**
  * Pile of cards held by a team which needs to have the points counted.

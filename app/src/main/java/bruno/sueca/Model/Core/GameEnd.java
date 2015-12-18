@@ -1,4 +1,4 @@
-package bruno.sueca.Model;
+package bruno.sueca.Model.Core;
 
 /**
  * Observes when a game ends and will award game points to the winner of the play.

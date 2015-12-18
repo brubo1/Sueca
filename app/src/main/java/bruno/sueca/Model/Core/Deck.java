@@ -1,4 +1,4 @@
-package bruno.sueca.Model.Card;
+package bruno.sueca.Model.Core;
 import java.util.Collections;
 import java.util.Stack;
 /**

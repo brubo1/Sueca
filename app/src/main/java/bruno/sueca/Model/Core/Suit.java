@@ -1,4 +1,4 @@
-package bruno.sueca.Model.Card;
+package bruno.sueca.Model.Core;
 
 /**
  * Represents the suit of a card

@@ -1,9 +1,8 @@
-package bruno.sueca.Model;
+package bruno.sueca.Model.Core;
 
 
 import java.util.ArrayList;
 
-import bruno.sueca.Model.Card.Card;
 import bruno.sueca.Model.Player.Player;
 
 /**

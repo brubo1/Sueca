@@ -1,4 +1,4 @@
-package bruno.sueca.Model;
+package bruno.sueca.Model.Core;
 
 /**
  * Game observers

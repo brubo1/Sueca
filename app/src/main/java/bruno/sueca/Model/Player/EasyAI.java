@@ -3,10 +3,10 @@ package bruno.sueca.Model.Player;
 import java.util.ArrayList;
 import java.util.Random;
 
-import bruno.sueca.Model.Card.Card;
-import bruno.sueca.Model.Card.Hand;
-import bruno.sueca.Model.Card.Suit;
-import bruno.sueca.Model.Team;
+import bruno.sueca.Model.Core.Card;
+import bruno.sueca.Model.Core.Hand;
+import bruno.sueca.Model.Core.Suit;
+import bruno.sueca.Model.Core.Team;
 
 /**
  * This AI will play legal cards randomly.
