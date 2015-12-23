@@ -30,5 +30,5 @@ public interface Player {
      * Decide whether deal himself first
      * @return It returns true if he decides to deal himself first.
      */
-    boolean Deal();
+    boolean deal();
 }

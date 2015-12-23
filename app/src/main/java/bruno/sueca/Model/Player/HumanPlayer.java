@@ -12,15 +12,17 @@ public class HumanPlayer implements Player{
 
     private Hand aHand;             //hand of the player
     private Card aTrumpCard;
+    private boolean aDealSelf;
     /**
      * a Human player constructor.
      */
     public HumanPlayer(){
         aHand = new Hand();
+        aDealSelf = false;
     }
     @Override
     public void drewFromDeck(Card pCard) {
-        aHand.DrawCard(pCard);
+        aHand.drawCard(pCard);
     }
 
     @Override
@@ -46,8 +48,8 @@ public class HumanPlayer implements Player{
      * @return It returns true if he decides to deal himself first.
      */
     @Override
-    public boolean Deal() {
-        return false;
+    public boolean deal() {
+        return aDealSelf;
     }
 
 

@@ -32,7 +32,7 @@ public class EasyAI extends AI {
         if( !this.aHand.hasSuit(pPlaySuit) || pPlaySuit == null ){ //the hand does not have the suit or he is the first player.
             cards = aHand.getCards();
             randomnumber = number.nextInt( cards.size() );
-            cardtoplay = cards.get( randomnumber);
+            cardtoplay = cards.get( randomnumber );
         }else{
             cards = aHand.getCards(pPlaySuit);
             randomnumber = number.nextInt(cards.size());
@@ -45,13 +45,13 @@ public class EasyAI extends AI {
     }
 
     @Override
-    public boolean Deal() {
+    public boolean deal() {
         return new Random().nextBoolean();
     }
 
     @Override
     public void drewFromDeck(Card pCard) {
-        aHand.DrawCard(pCard);
+        aHand.drawCard(pCard);
     }
 
     /**
@@ -61,11 +61,16 @@ public class EasyAI extends AI {
      */
     @Override
     public void playCard(Card pCard, Suit pPlaySuit) {
-        aHand.playCard(pCard);
+        this.aHand.playCard(pCard);
     }
 
     @Override
     public void setTrumpCard(Card pTrumpCard) {
         aTrumpCard = pTrumpCard;
+    }
+
+    public String toString(){
+        String result = "Easy AI has : " + aHand.toString();
+        return result;
     }
 }

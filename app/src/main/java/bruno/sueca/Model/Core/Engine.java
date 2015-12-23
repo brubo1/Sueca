@@ -37,7 +37,7 @@ public class Engine {
         return ourInstance;
     }
 
-    private Engine() {
+    public Engine() {
         aDeck = new Deck();
         aDifficulty = Difficulty.Easy;
         aDeck = new Deck();
@@ -103,7 +103,7 @@ public class Engine {
         while( !GameWon ){
             aCurrentPlayer = aCurrentDealer;
             aDeck.reset();
-            aAIs.get(aCurrentDealer).Deal();
+            this.AIdeal();
             this.nextPlayer();                                          //Player to the right of the dealer
             for( aNumberOfPlays = 0 ; aNumberOfPlays < 10 ; aNumberOfPlays++) {
                 for (AI ai : aAIs) {
@@ -203,7 +203,7 @@ public class Engine {
      * Deal the cards to the players
      */
     public void AIdeal(){
-        if( aAIs.get(aCurrentDealer).Deal() ){
+        if( aAIs.get(aCurrentDealer).deal() ){
             dealSelfFirst();
         }else{
             dealSelfLast();

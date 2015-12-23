@@ -57,6 +57,7 @@ public class Card implements Comparable<Card>{
     }
     /**
      * Compares 2 cards
+     * Formula is this - pCard
      * @param pCard  is the card to be compared to
      * @return true if identical
      */

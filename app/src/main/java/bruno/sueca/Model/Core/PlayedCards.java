@@ -13,7 +13,6 @@ public class PlayedCards {
     private ArrayList<Card> aPlayedCards;
     private ArrayList<Player> aPlayers;
     private int aWinner;
-    private Card aWinningCard;
 
     public PlayedCards(){
         aPlayedCards = new ArrayList<Card>();
@@ -53,11 +52,10 @@ public class PlayedCards {
     }
 
     public void setWinningCard( Card pCard ){
-        aWinningCard = pCard;
         aWinner = aPlayedCards.indexOf( pCard );
     }
     public Card getWinningCard(){
-        return aWinningCard;
+        return this.aPlayedCards.get( aWinner );
     }
 
     public Player getPlayer(){

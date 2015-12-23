@@ -16,14 +16,18 @@ public class PlayEnd implements PlayObserver {
      * @param pPlayedCards Cards played this current play
      * @return The player who won the play.
      */
-    @Override
     public Player notifyPlayEnd(PlayedCards pPlayedCards) {
         int winner = aCurrentWinner;
         reset();
         return pPlayedCards.getPlayer( winner );
     }
 
-    @Override
+    /**
+     * Notify a card played.
+     * @param pPlayedCards The card played
+     * @param pCurrentPlayer The player who played the card
+     * @return The winner of the current play.
+     */
     public int notifyCardPlayed(PlayedCards pPlayedCards, int pCurrentPlayer) {
         Card BestCard = pPlayedCards.getCard( aCurrentWinner );
         if(aCurrentWinner == -1 ){
@@ -34,14 +38,14 @@ public class PlayEnd implements PlayObserver {
                 BestCard = pPlayedCards.getCard(pCurrentPlayer);
                 aCurrentWinner = pCurrentPlayer;
             } else if (pPlayedCards.getCard(pCurrentPlayer).isTrump(aTrump) && BestCard.isTrump(aTrump)) {   // trump / trump
-                if (BestCard.compareTo(pPlayedCards.getCard(pCurrentPlayer)) > 0) {
+                if (BestCard.compareTo(pPlayedCards.getCard(pCurrentPlayer)) < 0) {
                     BestCard = pPlayedCards.getCard(pCurrentPlayer);
                     aCurrentWinner = pCurrentPlayer;
                 }
             } else if (!pPlayedCards.getCard(pCurrentPlayer).isTrump(aTrump) && BestCard.isTrump(aTrump)) {// not trump / trump
                 //do nothing
             } else {
-                if (BestCard.compareTo(pPlayedCards.getCard(pCurrentPlayer)) > 0) {                             // not trump / not trump
+                if (BestCard.compareTo(pPlayedCards.getCard(pCurrentPlayer)) < 0) {                             // not trump / not trump
                     BestCard = pPlayedCards.getCard(pCurrentPlayer);
                     aCurrentWinner = pCurrentPlayer;
                 }
@@ -56,11 +60,13 @@ public class PlayEnd implements PlayObserver {
      * Sets the Trump suit.
      * @param pTrump The trump card
      */
-    @Override
     public void setTrump(Suit pTrump) {
         aTrump = pTrump;
     }
 
+    /**
+     * Reset for the next play.
+     */
     private void reset(){
         aCurrentWinner = -1;
         aTrump = null;

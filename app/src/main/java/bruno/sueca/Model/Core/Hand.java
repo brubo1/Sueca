@@ -2,7 +2,6 @@ package bruno.sueca.Model.Core;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 /**
  * This class represents a hand of cards.
@@ -24,7 +23,7 @@ public class Hand {
      * @param pCard Card to be removed from the hand.
      */
     public void playCard(Card pCard){
-        this.aCards.remove(pCard);
+        this.aCards.remove( pCard );
     }
 
     /**
@@ -46,7 +45,7 @@ public class Hand {
      * Draw a card from the deck.
      * @param pCard Card drawn from the deck.
      */
-    public void DrawCard(Card pCard) {
+    public void drawCard(Card pCard) {
         this.aCards.add(pCard);
     }
 
@@ -72,7 +71,7 @@ public class Hand {
         ArrayList<Card> cards = new  ArrayList<Card>();
         int i = 0;
         for ( Card card : aCards){
-            cards.add(card.clone(card.getRank(), card.getSuit()));
+            cards.add( card );
             i++;
         }
         return cards;
@@ -88,22 +87,39 @@ public class Hand {
         int i = 0;
         for ( Card card : aCards){
             if( card.getSuit().equals(pPlaySuit)){
-                cards.add(card.clone(card.getRank(), card.getSuit()));
+                cards.add( card );
             }
             i++;
         }
         return cards;
     }
+
+    /**
+     * Check if the current hand has the card
+     * @param pCard a Card
+     * @return true if the card is in the hand
+     */
+    public boolean contain( Card pCard ){
+
+        for ( Card card : aCards ){
+            if( card.equals( pCard )){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Describes the Hand.
      * @return The description of the hand.
      */
     public String toString(){
         String result = "[";
-        for ( Iterator<Card> card = this.aCards.iterator(); card.hasNext() ; ){
-            result = result + " " + card.toString();
+        for ( Card card : this.aCards ){
+            result = result + " " + card.toString() + ",";
         }
-        result = result + "]";
+        result = result.substring(0, result.lastIndexOf(","));
+        result = result + " ]";
         return result;
     }
 
